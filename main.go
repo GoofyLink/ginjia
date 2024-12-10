@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blog.com/controller"
 	"context"
 	"fmt"
 	"log"
@@ -58,6 +59,13 @@ func main() {
 	// 5.雪花算法生成分布式ID
 	if err := snowflake.Init(viper.GetString("app.startTime"), viper.GetInt64("app.machineID")); err != nil {
 		fmt.Printf("init snowflake failed,err:%v\n", err)
+		return
+	}
+
+	//
+	//6.初始化翻译器  初始化gin框架内置的校验器使用的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init validator trans failed, err:%v\n", err)
 		return
 	}
 
