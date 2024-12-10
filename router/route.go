@@ -1,7 +1,10 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
+
+	"blog.com/middlewares"
 
 	"blog.com/controller"
 
@@ -21,6 +24,9 @@ func Setup() *gin.Engine {
 	//注册业务路由
 	r.POST("/signup", controller.SignUpHandler)
 	r.POST("/login", controller.LoginHandler)
+	r.GET("/ping", middlewares.JWTAuthMiddleware(), func(context *gin.Context) {
+		fmt.Println("哈哈")
+	})
 
 	//没有找到页面返回这个路由
 	r.NoRoute(func(context *gin.Context) {

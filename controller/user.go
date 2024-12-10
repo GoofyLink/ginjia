@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"errors"
+
+	"blog.com/dao/mysql"
 	"github.com/go-playground/validator/v10"
 
 	"go.uber.org/zap"
@@ -38,14 +41,17 @@ func SignUpHandler(c *gin.Context) {
 		//c.JSON(http.StatusOK, gin.H{
 		//	"message": "注册失败",
 		//})
-		ResponseError(c, CodeSignUpFailed)
+		if errors.Is(err, mysql.ErrorUserExist) {
+			ResponseError(c, CodeUserExist)
+		}
+		ResponseError(c, CodeServerBusy)
 		return
 	}
 	// 3. 返回结果
 	//c.JSON(http.StatusOK, gin.H{
 	//	"message": "ok",
 	//})
-	ResponseSuccess(c, CodeSignSuccess)
+	ResponseSuccess(c, nil)
 }
 
 func LoginHandler(c *gin.Context) {
@@ -69,18 +75,22 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 	// 2.处理登录相关逻辑
-	if err := logic.Login(p); err != nil {
+	token, err := logic.Login(p)
+	if err != nil {
 		zap.L().Error("logic.login with invalid params", zap.Error(err))
 		//c.JSON(http.StatusOK, gin.H{
 		//	"message": "用户名或密码错误",
 		//})
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			ResponseError(c, CodeUserNotExist)
+			return
+		}
 		ResponseError(c, CodeInvalidPassword)
-
 		return
 	}
 	// 最后返回数据
 	//c.JSON(http.StatusOK, gin.H{
 	//	"message": "登录成功",
 	//})
-	ResponseSuccess(c, CodeLoginSuccess)
+	ResponseSuccess(c, token)
 }

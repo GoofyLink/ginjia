@@ -11,6 +11,12 @@ import (
 
 const secret = "goofy"
 
+var (
+	ErrorUserExist      = errors.New("用户已存在")
+	ErrorUserNotExist   = errors.New("用户不存在")
+	ErrorIvalidPassword = errors.New("密码错误")
+)
+
 // CheckUserExists 检查用户是否存在
 func CheckUserExists(username string) (err error) {
 	// 查询
@@ -20,7 +26,7 @@ func CheckUserExists(username string) (err error) {
 		return err
 	}
 	if count > 0 {
-		return errors.New("用户已存在")
+		return ErrorUserExist
 	}
 	return
 }
@@ -50,7 +56,7 @@ func Login(p *models.User) (err error) {
 
 	err = db.Get(p, sqlStr, p.Username)
 	if err == sql.ErrNoRows {
-		return errors.New("用户不存在")
+		return ErrorUserNotExist
 	}
 
 	if err != nil {
@@ -60,7 +66,7 @@ func Login(p *models.User) (err error) {
 	// 判断密码是否正确
 	password := encryptPassword(oPassword)
 	if password != p.Password {
-		return errors.New("密码错误")
+		return ErrorIvalidPassword
 	}
 	return
 }

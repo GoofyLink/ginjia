@@ -12,6 +12,8 @@ const (
 	CodeSignUpFailed
 	CodeSignSuccess
 	CodeLoginSuccess
+	CodeNeedLogin
+	CodeInvalidToken
 )
 
 var codeMessageMap = map[ResponseCode]string{
@@ -24,6 +26,8 @@ var codeMessageMap = map[ResponseCode]string{
 	CodeSignUpFailed:    "注册失败",
 	CodeSignSuccess:     "注册成功",
 	CodeLoginSuccess:    "登录成功",
+	CodeNeedLogin:       "需要登录",
+	CodeInvalidToken:    "无效的token",
 }
 
 func (c ResponseCode) Message() string {
