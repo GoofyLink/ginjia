@@ -1,6 +1,8 @@
 app:
   name: "blog_app"
   port: 8081
+  startTime: "2024-12-09"
+  machineID: 1
 log:
   level: "debug"
   filename: "blog_app.log"
@@ -12,7 +14,7 @@ mysql:
   port: 3306
   user: "root"
   password: "root"
-  dbname: "mysql_demo"
+  dbname: "reddit"
   max_open_conns: 200
   max_idle_conns: 50
 redis:

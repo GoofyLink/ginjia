@@ -11,6 +11,7 @@
 *.bin
 *.o
 *.out
+gin-jia
 
 # 日志文件
 *.log

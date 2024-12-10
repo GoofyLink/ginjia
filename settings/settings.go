@@ -26,7 +26,7 @@ func Init() (err error) {
 
 	//viper.SetConfigFile()
 
-	viper.SetConfigName("config")
+	viper.SetConfigName("./config/config.yaml")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 

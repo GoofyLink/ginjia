@@ -10,6 +10,8 @@ import (
 	"syscall"
 	"time"
 
+	"blog.com/pkg/snowflake"
+
 	"go.uber.org/zap"
 
 	"github.com/spf13/viper"
@@ -37,6 +39,7 @@ func main() {
 		return
 	}
 	defer zap.L().Sync()
+	zap.L().Debug("logger init success...")
 
 	// 3.初始化mysql
 	if err := mysql.Init(); err != nil {
@@ -51,6 +54,12 @@ func main() {
 		return
 	}
 	defer redis.Close()
+
+	// 5.雪花算法生成分布式ID
+	if err := snowflake.Init(viper.GetString("app.startTime"), viper.GetInt64("app.machineID")); err != nil {
+		fmt.Printf("init snowflake failed,err:%v\n", err)
+		return
+	}
 
 	// 5.注册路由
 	r := router.Setup()
