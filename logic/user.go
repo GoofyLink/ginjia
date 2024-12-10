@@ -25,3 +25,12 @@ func SignUp(p *models.ParamSignUp) (err error) {
 	}
 	return err
 }
+
+func Login(p *models.ParamLogin) (err error) {
+	// 直接登录1
+	user := &models.User{
+		Username: p.Username,
+		Password: p.Password,
+	}
+	return mysql.Login(user)
+}

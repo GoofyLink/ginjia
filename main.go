@@ -1,7 +1,6 @@
 package main
 
 import (
-	"blog.com/controller"
 	"context"
 	"fmt"
 	"log"
@@ -10,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"blog.com/controller"
 
 	"blog.com/pkg/snowflake"
 
@@ -35,7 +36,7 @@ func main() {
 	}
 
 	// 2.初始化日志
-	if err := logger.Init(); err != nil {
+	if err := logger.Init("dev"); err != nil {
 		fmt.Printf("init logger failed,err:%v\n", err)
 		return
 	}
@@ -64,7 +65,7 @@ func main() {
 
 	//
 	//6.初始化翻译器  初始化gin框架内置的校验器使用的翻译器
-	if err := controller.InitTrans("zh"); err != nil {
+	if err := controller.InitTranslate("zh"); err != nil {
 		fmt.Printf("init validator trans failed, err:%v\n", err)
 		return
 	}

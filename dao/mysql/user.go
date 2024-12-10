@@ -1,10 +1,12 @@
 package mysql
 
 import (
-	"blog.com/models"
 	"crypto/md5"
+	"database/sql"
 	"encoding/hex"
 	"errors"
+
+	"blog.com/models"
 )
 
 const secret = "goofy"
@@ -39,4 +41,26 @@ func encryptPassword(oPassword string) string {
 
 	// 转换成十六进制字符串
 	return hex.EncodeToString(h.Sum([]byte(oPassword)))
+}
+
+func Login(p *models.User) (err error) {
+	//原始密码
+	oPassword := p.Password
+	sqlStr := `select user_id,username,password from users where username=?`
+
+	err = db.Get(p, sqlStr, p.Username)
+	if err == sql.ErrNoRows {
+		return errors.New("用户不存在")
+	}
+
+	if err != nil {
+		// 查询数据库失败
+		return
+	}
+	// 判断密码是否正确
+	password := encryptPassword(oPassword)
+	if password != p.Password {
+		return errors.New("密码错误")
+	}
+	return
 }

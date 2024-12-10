@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"blog.com/models"
 	"fmt"
 	"reflect"
 	"strings"
+
+	"blog.com/models"
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
@@ -19,7 +20,7 @@ import (
 var trans ut.Translator
 
 // InitTrans 初始化翻译器
-func InitTrans(locale string) (err error) {
+func InitTranslate(locale string) (err error) {
 	// 修改gin框架中的Validator引擎属性，实现自定制
 	// v校验器
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
